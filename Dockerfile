@@ -3,14 +3,10 @@ FROM tecadmin/ubuntu-ssh:16.04
 LABEL maintainer="sam@samrahmeh.com"
 
 RUN apt-get update \
-   && apt-get install -y apache2
+   && apt-get install -y apache2 \
+   && apt install -y wget \
+   && apt-get install -y unzip
 
-
-RUN yum update -y && \
-    yum install -y httpd && \
-    yum search wget && \
-    yum install wget -y && \
-    yum install unzip -y
 
 RUN cd /var/www/html
 
