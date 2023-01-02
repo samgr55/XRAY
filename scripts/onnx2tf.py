@@ -7,14 +7,6 @@ import onnx_tf
 from onnx_tf.backend import prepare
 import numpy as np
 
-# onnx_model = onnx.load("chest.onnx")  # load onnx model
-# onnx.checker.check_model(onnx_model)
-
-# from onnx import optimizer
-
-# optimized_model = optimizer.optimize(onnx_model)
-# tf_rep = onnx_tf.backend.prepare(optimized_model, strict=False)  # prepare tf representation
-# tf_rep.export_graph("chest2.pb")  # export the model
 
 
 def load_graph_base(frozen_graph_filename):

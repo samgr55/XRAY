@@ -20,7 +20,6 @@ def convert_onnx2tf_pb(onnx_file="chest.onnx", pb_file="chest.pb"):
     tf_rep.export_graph(pb_file)
     
 def convert_tf_pb2savedmodel(pb_file="chest.pb", savedmodel_folder="chest-savedmodel", input_node=None, output_node=None):
-    # from here: https://stackoverflow.com/questions/44329185/convert-a-graph-proto-pb-pbtxt-to-a-savedmodel-for-use-in-tensorflow-serving-o
     for package in ["tensorflow"]:
         print(pkg_resources.get_distribution(package))
     import tensorflow as tf
@@ -36,7 +35,6 @@ def convert_tf_pb2savedmodel(pb_file="chest.pb", savedmodel_folder="chest-savedm
     sigs = {}
 
     with tf.Session(graph=tf.Graph()) as sess:
-        # name="" is important to ensure we don't get spurious prefixing
         tf.import_graph_def(graph_def, name="")
         g = tf.get_default_graph()
         gdef = g.as_graph_def()
