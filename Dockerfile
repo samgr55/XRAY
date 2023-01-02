@@ -1,4 +1,9 @@
-FROM amazonlinux:latest
+FROM tecadmin/ubuntu-ssh:16.04
+
+LABEL maintainer="sam@samrahmeh.com"
+
+RUN apt-get update \
+   && apt-get install -y apache2
 
 
 RUN yum update -y && \
@@ -17,6 +22,9 @@ RUN cp -r XRAY-main/* /var/www/html/
 
 RUN rm -rf XRAY-main main.zip
 
-EXPOSE 80
 
-ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+WORKDIR /var/www/html
+
+CMD ["apachectl", "-D", "FOREGROUND"]
+
+EXPOSE 80
