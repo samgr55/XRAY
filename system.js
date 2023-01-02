@@ -60,15 +60,15 @@ function display_size_data(){
 	}else{
 		prog="\\";
 	}
-	status('Loading model... ' + total + "/" + (8+16) + "  " + prog);
+	status('Loading Pretrained models ' + total + "/" + (8+16) + "  " + prog);
 }
 
 const RECSCORE_THRESH = 0.5;
 const OODSCORE_THRESH = 1000;
 
-const MODEL_PATH = 'https://mlmed.github.io/tools/xray/models/chestxnet-45rot15trans15scale4byte';
+const MODEL_PATH = 'https://samrahmeh.com/XRAY/models/chestxnet-45rot15trans15scale4byte';
 //const MODEL_PATH = 'D:\Architecture\My Design\My Scripts\2020\AI\My Projects\POC\POC\models\chestxnet-45rot15trans15scale4byte';
-const AEMODEL_PATH = 'https://mlmed.github.io/tools/xray/models/ae-chest-savedmodel-64-512';
+const AEMODEL_PATH = 'https://samrahmeh.com/XRAY/models/ae-chest-savedmodel-64-512';
 //const AEMODEL_PATH = 'D:\Architecture\My Design\My Scripts\2020\AI\My Projects\POC\POC\models\ae-chest-savedmodel-64-512';
 
 let chesternet;
@@ -336,7 +336,6 @@ async function predict_real(imgElement, isInitialRun, name) {
 	canvas = canvas_b
 	b = {width: canvas.width, height: canvas.height, data: canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data, channels: 4, canvas: canvas}
 
-	// https://github.com/darosh/image-ssim-js
 	ssim = ImageSSIM.compare(a, b, 8, 0.01, 0.03, 8)
 	console.log("ssim " + JSON.stringify(ssim));
 
@@ -371,42 +370,6 @@ async function predict_real(imgElement, isInitialRun, name) {
 //	////////////////////
 
 	console.log("Plotted Reconstruction " + Math.floor(performance.now() - startTime) + "ms");
-
-
-	// zoom does not work yet
-//	var main = currentpred.find(".inputimage")[0]
-//	var zoom = document.getElementById("zoom");
-//	var ctx = main.getContext("2d")
-//	var zoomCtx = zoom.getContext("2d");
-
-//	main.addEventListener("mousemove", function(e){
-//	console.log(e);
-//	zoomCtx.fillStyle = "white";
-//	zoomCtx.fillRect(0,0, zoom.width, zoom.height);
-//	zoomCtx.drawImage(main, (e.x-$(main).offset().left)/2, e.y-$(main).offset().top, 100, 50, 0,0, 400, 200);
-//	zoom.style.top = e.pageY + 10 + "px"
-//	zoom.style.left = e.pageX + 10 + "px"
-//	zoom.style.display = "block";
-//	});
-
-//	main.addEventListener("mouseout", function(){
-//	zoom.style.display = "none";
-//	});
-
-
-//	m = img.mean(2);
-//	oodscore = 
-//	img.slice([0,0,0],[-1,-1,1]).sub(m.expandDims(2)).abs().sum().add(
-//	img.slice([0,0,1],[-1,-1,1]).sub(m.expandDims(2)).abs().sum()).add( 
-//	img.slice([0,0,2],[-1,-1,1]).sub(m.expandDims(2)).abs().sum()).dataSync();
-//	console.log("oodscore " + oodscore);
-//	else if (oodscore > OODSCORE_THRESH){
-
-//	showProbErrorColor(currentpred.find(".predbox")[0], recScore)
-//	return
-
-
-//	recScore = 0.01
 
 
 	status('Predicting disease...');
@@ -446,11 +409,6 @@ async function predict_real(imgElement, isInitialRun, name) {
 		if (can_predict){
 			currentpred.find(".gradviz .computegrads").show()
 
-//			currentpred.find(".gradviz .computegrads").click(function(){
-//			thispred = $(this).closest(".prediction")
-//			thispred.find(".gradviz .computegrads").hide()
-//			computeGrads(thispred, batched, [10]);
-//			});
 		}
 
 
@@ -604,7 +562,6 @@ function enforceBounds(x) {
 	}
 }
 function interpolateLinearly(x, values) {
-	// Split values into four lists
 	var x_values = [];
 	var r_values = [];
 	var g_values = [];
@@ -622,7 +579,6 @@ function interpolateLinearly(x, values) {
 	i = i-1;
 	var width = Math.abs(x_values[i] - x_values[i+1]);
 	var scaling_factor = (x - x_values[i]) / width;
-	// Get the new color values though interpolation
 	var r = r_values[i] + scaling_factor * (r_values[i+1] - r_values[i])
 	var g = g_values[i] + scaling_factor * (g_values[i+1] - g_values[i])
 	var b = b_values[i] + scaling_factor * (b_values[i+1] - b_values[i])
@@ -640,8 +596,6 @@ function makeColor(data) {
 	}
 }
 function makeTransparent(pix) {
-	//var imgd = ctx.getImageData(0, 0, imageWidth, imageHeight),
-	//pix = imgd.data;
 
 	for (var i = 0, n = pix.length; i <n; i += 4) {
 		var r = pix[i],
@@ -649,13 +603,9 @@ function makeTransparent(pix) {
 		b = pix[i+2];
 
 		if(g < 20){ 
-			// If the green component value is higher than 150
-			// make the pixel transparent because i+3 is the alpha component
-			// values 0-255 work, 255 is solid
 			pix[i + 3] = 0;
 		}
 	}
-	//ctx.putImageData(imgd, 0, 0);​
 }
 
 
@@ -753,28 +703,9 @@ function showProbResults(currentpred) {
 			target.style.fontWeight="900";
 			probsElement.appendChild(target)
 
-//			target = document.createElement('span');
-//			//target.innerText = "|";
-//			target.className="glyphicon glyphicon-menu-right"
-//			target.style.marginLeft="-7px"; //glyh is 14x14
-//			target.style.position="absolute";
-//			target.style.left=parseInt(currentpred[0].PPV80[i].probability*100) + "%";
-//			target.style.fontWeight="900";
-//			probsElement.appendChild(target)
 
-//			target = document.createElement('span');
-//			//target.innerText = "|";
-//			target.className="glyphicon glyphicon-menu-left"
-//			target.style.marginLeft="-7px"; //glyh is 14x14
-//			target.style.position="absolute";
-//			target.style.left=parseInt(currentpred[0].NPV95[i].probability*100) + "%";
-//			target.style.fontWeight="900";
-//			probsElement.appendChild(target)
 		}
 
-		//probsElement.innerText = (parseInt(classes[i].probability*100)) + "%";
-		//scale = parseInt((1-classes[i].probability)*255)
-		//probsElement.style.backgroundColor = "rgb(255," + scale + "," + scale + ")";
 		row.appendChild(probsElement);
 		probsContainer.appendChild(row);
 
@@ -786,9 +717,7 @@ function showProbResults(currentpred) {
 			function(e){
 				a=$(this).find("span")[0];
 				a.innerHTML=a.style.left
-//				if (parseInt(a.style.left)>60){
-//				a.style.marginLeft="-30px";
-//				}
+
 			},
 			function(e){
 				a=$(this).find("span")[0];
@@ -899,7 +828,7 @@ function findGetParameter(parameterName) {
 }
 
 function downloadCSV(){
-	download("chester-export.csv",computeCSV());
+	download("XRAy-Export.csv",computeCSV());
 }
 
 function computeCSV(){
@@ -919,7 +848,6 @@ function computeCSV(){
 	return lines
 }
 
-//https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server
 function download(filename, text) {
 	var element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
