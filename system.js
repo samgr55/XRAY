@@ -357,7 +357,7 @@ async function predict_real(imgElement, isInitialRun, name) {
 	ctx.putImageData(d,0,0);
 
 	scoreBox = document.createElement("center")
-	score = "recScore:" + parseFloat(recScore).toFixed(2)  + ", ssim:" + ssim.ssim.toFixed(2) 
+	score = "                     " 
 	scoreBox.innerText = score
 	currentpred.find(".oodimagebox")[0].append(scoreBox)
 
@@ -650,7 +650,7 @@ function showProbResults(currentpred) {
 			probsElement.className = 'cell';
 		}else{
 			classElement.innerText = classes[i].className;
-			if (classes[i].probability > 0.6){
+			if (classes[i].probability > 0.52){
 				classElement.style.fontWeight = "900";
 			}
 			classElement.style.fontSize="small";
@@ -662,11 +662,11 @@ function showProbResults(currentpred) {
 		row.appendChild(classElement);
 
 		const explainElement = document.createElement('button');
-		if (i == -1 || classes[i].probability <= 0.6){
+		if (i == -1 || classes[i].probability <= 0.52){
 			explainElement.style.visibility = "hidden"
 		}else{
-			explainElement.className = 'explain-btn btn btn-info';
-			explainElement.innerText = "explain";
+			explainElement.className = 'explain-btn btn btn-outline-primary';
+			explainElement.innerText = "Elaborate";
 			$(explainElement).click(function(){computeGrads(currentpred,i)})	    	
 		}
 		row.appendChild(explainElement);
@@ -679,14 +679,14 @@ function showProbResults(currentpred) {
 
 		if (i == -1){
 			target = document.createElement('span');
-			target.innerText = "Healthy";
+			target.innerText = "Good";
 			target.style.position="absolute";
 			target.style.fontSize="x-small"
 				target.style.left=0;
 			probsElement.appendChild(target)
 
 			target = document.createElement('span');
-			target.innerText = "Risk";
+			target.innerText = "Bad";
 			target.style.position="absolute";
 			target.style.fontSize="x-small"
 				target.style.right=0;
